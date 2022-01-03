@@ -32,3 +32,4 @@ jobs:
         }
 
         mirror proto xcbproto git://cgit.freedesktop.org/xcb/proto.git
+        mirror lib libxcb git://cgit.freedesktop.org/xcb/libxcb.git
