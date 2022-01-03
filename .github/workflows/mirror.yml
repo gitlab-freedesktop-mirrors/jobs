@@ -21,7 +21,7 @@ jobs:
 
         function mirror {
           if [ "$3" == "" ]; then
-            REMOTE=$GITLAB/$1.git
+            REMOTE=$GITLAB/$1/$2.git
           else
             REMOTE=$3
           fi
@@ -30,8 +30,5 @@ jobs:
           git remote add github "$GITHUB/$2.git"
           git push --mirror github 
         }
-        function mirror_proto {
-          mirror proto/$1 $1 $2
-        }
 
-        mirror_proto xcbproto git://cgit.freedesktop.org/xcb/proto.git
+        mirror proto xcbproto git://cgit.freedesktop.org/xcb/proto.git
