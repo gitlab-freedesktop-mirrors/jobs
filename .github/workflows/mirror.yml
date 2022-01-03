@@ -20,13 +20,18 @@ jobs:
         GITHUB=https://x-access-token:$TOKEN@github.com/gitlab-freedesktop-mirrors
 
         function mirror {
-          git clone --mirror $GITLAB/$1.git
+          if [ "$3" == "" ]; then
+            REMOTE=$GITLAB/$1.git
+          else
+            REMOTE=$3
+          fi
+          git clone --mirror $REMOTE $2
           cd $2/
           git remote add github "$GITHUB/$2.git"
           git push --mirror github 
         }
         function mirror_proto {
-          mirror proto/$1 $1
+          mirror proto/$1 $1 $2
         }
 
-        mirror_proto xcbproto
+        mirror_proto xcbproto git://cgit.freedesktop.org/xcb/proto.git
