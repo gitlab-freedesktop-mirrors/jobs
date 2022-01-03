@@ -1,0 +1,31 @@
+name: Mirror Repositories
+on:
+  schedule:
+    # nightly (0th hour 0th minute of every day)
+    - cron:  '0 0 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Mirror
+      run: |
+        TOKEN=${{ secrets.TOKEN_FOR_MIRRORING }}
+        if [ -z "${TOKEN}" ]; then
+          echo "Token is unset. Can't do mirroring."
+          exit 1
+        fi
+        GITLAB=https://gitlab.freedesktop.org/xorg
+        GITHUB=https://x-access-token:$TOKEN@github.com/gitlab-freedesktop-mirrors
+
+        function mirror {
+          git clone --mirror $GITLAB/$1.git
+          cd $2/
+          git remote add github "$GITHUB/$2.git"
+          git push --mirror github 
+        }
+        function mirror_proto {
+          mirror proto/$1 $1
+        }
+
+        mirror_proto xcbproto
