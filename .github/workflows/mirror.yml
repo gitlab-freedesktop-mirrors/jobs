@@ -4,6 +4,7 @@ on:
     # nightly (0th hour 0th minute of every day)
     - cron:  '0 0 * * *'
   workflow_dispatch:
+  push:
 
 jobs:
   build:
@@ -16,20 +17,49 @@ jobs:
           echo "Token is unset. Can't do mirroring."
           exit 1
         fi
+
         GITLAB=https://gitlab.freedesktop.org/xorg
         GITHUB=https://x-access-token:$TOKEN@github.com/gitlab-freedesktop-mirrors
+        CGIT=git://cgit.freedesktop.org
 
         function mirror {
           if [ "$3" == "" ]; then
             REMOTE=$GITLAB/$1/$2.git
           else
-            REMOTE=$3
+            REMOTE=$CGIT/$3.git
           fi
           git clone --mirror $REMOTE $2
           cd $2/
           git remote add github "$GITHUB/$2.git"
           git push --mirror github 
         }
+        function mirrorx {
+          mirror xorg/$1 $2 $3
+        }
+        function mirrorlibx {
+          mirrorx lib $1 $2
+        }
+        function mirrorsub {
+          mirror $1/$2 $2 $1/$2
+        }
 
-        mirror proto xcbproto git://cgit.freedesktop.org/xcb/proto.git
-        mirror lib libxcb git://cgit.freedesktop.org/xcb/libxcb.git
+        mirrorx proto xcbproto xcb/proto
+        mirrorlibx libxcb xcb/libxcb
+        mirrorlibx libxcb-wm xcb/util-wm
+        mirrorlibx libxcb-util xcb/util
+        mirrorlibx libxcb-image xcb/util-image
+        mirrorlibx libxcb-keysyms xcb/util-keysyms
+        mirrorlibx libxcb-render-util xcb/util-renderutil
+        mirrorlibx libxext xorg/lib/libXext
+        mirrorlibx libxtst xorg/lib/libXtst
+        mirrorlibx libxfixes xorg/lib/libXfixes
+        mirrorlibx libxv xorg/lib/libXv
+        mirrorlibx libxrandr xorg/lib/libXrandr
+        mirrorlibx libxrender xorg/lib/libXrender
+        mirrorlibx libxdamage xorg/lib/libXdamage
+        mirrorlibx libxcomposite xorg/lib/libXcomposite
+        mirrorlibx libpciaccess xorg/lib/libpciaccess
+        mirrorsub wayland wayland
+        mirrorsub wayland wayland-protocols
+        mirrorsub mesa drm
+        mirrorsub vdpau libvdpau
