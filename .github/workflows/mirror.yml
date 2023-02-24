@@ -45,6 +45,7 @@ jobs:
 
         mirrorx proto xcbproto xcb/proto
         mirrorlibx libxcb xcb/libxcb
+        mirrorlibx libxcb-cursor xcb/util-cursor
         mirrorlibx libxcb-wm xcb/util-wm
         mirrorlibx libxcb-util xcb/util
         mirrorlibx libxcb-image xcb/util-image
