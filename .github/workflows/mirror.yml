@@ -59,6 +59,7 @@ jobs:
         mirrorlibx libxrender xorg/lib/libXrender
         mirrorlibx libxdamage xorg/lib/libXdamage
         mirrorlibx libxcomposite xorg/lib/libXcomposite
+        mirrorlibx libxcursor xorg/lib/libXcursor
         mirrorlibx libpciaccess xorg/lib/libpciaccess
         mirrorsub wayland wayland
         mirrorsub wayland wayland-protocols
